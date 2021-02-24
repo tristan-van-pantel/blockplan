@@ -126,7 +126,7 @@ $routes->get('/lecturers/editlecturer/(:num)', 'Lecturers::editlecturer/$1',  ['
 $routes->post('/lecturers/save', 'Lecturers::save',  ['as' => 'savelecturer']);
 
 $routes->get('/news/unread', 'News::getUsersUnreadNews',  ['as' => 'showUnread']);
-$routes->get('/news/markread', 'News::markNewsAsRead',  ['as' => 'markread']);
+$routes->post('/news/markread', 'News::markNewsAsRead',  ['as' => 'markread']);
 
 
 

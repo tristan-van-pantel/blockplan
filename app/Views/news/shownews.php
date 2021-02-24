@@ -157,25 +157,31 @@ function postRead(e) {
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <script type='text/javascript'>
+   //wait for DOM to load
    $(document).ready(function(){
-
-     $('.post_read').click(function(e){
+    // if one of the forms is submitted
+     $('.post_read').submit(function(e){
+         // prevent forms default behaviour (e.g. page-reload)
         e.preventDefault();
+   
 
        // CSRF Hash
        var csrfName = $('.txt_csrfname').attr('name'); // CSRF Token name
        var csrfHash = $('.txt_csrfname').val(); // CSRF hash
-       //alert(csrfHash);
+        //of the submittet form (this), get the value of the hidden input, which class is of type .news_id
+        var news_id = $(this.news_id).val();
+        $(this).hide(); 
+ 
+
 
 
        // AJAX request
        $.ajax({
           url: "<?=route_to('markread')?>",
           method: 'post',
-          data: {username: 'test',[csrfName]: csrfHash },
+          data: {username: news_id,[csrfName]: csrfHash },
           dataType: 'json',
           success: function(response){
-              alert('hier');
 
             // Update CSRF hash
             $('.csrf_test_name').val(response.token);
@@ -183,8 +189,8 @@ function postRead(e) {
 
 
             if(response.success == 1){
-               // Loop on response
-               alert($(response.user_id));
+                // $(this.btn).hide();
+
 
             }else{
                // Error

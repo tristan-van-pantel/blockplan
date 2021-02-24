@@ -17,17 +17,19 @@ class News extends BaseController
         // if (!in_groups('students')) {
         //     return redirect()->back();
         // }
+        //verify that user has got a class, else redirect
         $class = (!empty(model('UserModel')->getClassIdByUserId(user_id()))) ? (model('UserModel')->getClassIdByUserId(user_id())[0]) : (null);
         if (empty($class)) {
             return redirect()->back();
         }
         // $news = model('ClassesModel')->getClassesNews($class->id);
+        // get all news related to users schoolclass
         $news = model('ClassesModel')->select('news.id, news, news.users_id, news.created_at, news.updated_at')
             ->join('classesnews', 'classesnews.classes_id = classes.id')
             ->join('news', 'news.id = classesnews.news_id')
             ->where('classes.id', $class->id)
             ->orderBy('created_at', 'DESC')->paginate(5);
-
+        // get all time values for the each news, like when created, updated and get these values i a human readable format
         foreach ($news as $item) {
             // make use of Codeigniters fully-localized, immutable, date/time class that is built on PHP’s DateTime object the get a humen readable sting
             // that displays the difference between the current date/time and the instance in a human readable format that is geared towards being easily understood.
@@ -238,16 +240,19 @@ class News extends BaseController
       $request = service('request');
       $postData = $request->getPost();
       $news_id = $postData['username'];
+      $hash = $postData['[csrfName]'];
+      $user_id = user_id();
+
+      //update readstatus
+      model('UserReadNewsModel')->updateusersNewsReadStatus($user_id, $news_id);
 
 
         $data = array();
-
-        // Read new token and assign in $data['token']
+        
+        // Return data to view
         $data['token'] = csrf_hash();
-        //$news_id = $this->request->getVar('username');
-
-
         $data['news_id'] = $news_id;
+        $data['success'] = 1;
 
     
 
@@ -255,7 +260,7 @@ class News extends BaseController
 
 
 
-        return 'Die Newsid lautet: ' . $news_id . ' !';
+
     }
     
 }

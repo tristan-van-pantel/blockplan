@@ -90,4 +90,17 @@ class UserReadNewsModel extends Model
         return $eventData['data'];  
 
     }
+
+
+    public function updateusersNewsReadStatus($users_id, $news_id) {
+        $db      = \Config\Database::connect();
+        $builder = $db->table('userreadnews');        
+        $builder->where('users_id', $users_id);
+        $builder->where('news_id', $news_id);
+        $data = [
+            'read' => 1
+        ];
+        $builder->update($data);
+
+    }
 }
