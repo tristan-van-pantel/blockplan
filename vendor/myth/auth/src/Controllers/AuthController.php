@@ -132,10 +132,10 @@ class AuthController extends BaseController
 
 
 // uncomment the next three lines,after you have have created your first user and put him into group 1 ("admins")
-if(!in_groups('admins')) {
-	return redirect()->back();
+// if(!in_groups('admins')) {
+// 	return redirect()->back();
 
-}
+// }
 
 
         // Check if registration is allowed
